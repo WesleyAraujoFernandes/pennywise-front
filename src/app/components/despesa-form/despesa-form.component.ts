@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Despesa, DespesaService } from '../../services/despesa.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { FormErrorService } from '../../services/form-error.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-despesa-form',
@@ -20,13 +22,10 @@ export class DespesaFormComponent implements OnInit {
   despesa: Despesa = {} as Despesa;
   isEdit = false;
 
-  constructor(private service: DespesaService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private service: DespesaService, public formError: FormErrorService, private toast: ToastService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log('DespesaFormComponent carregado');
-
     const id = this.route.snapshot.paramMap.get('id');
-    console.log('ID da rota:', id);
 
     if (id) {
       this.isEdit = true;
@@ -38,30 +37,45 @@ export class DespesaFormComponent implements OnInit {
             data: res.data ? res.data.substring(0, 10) : ''
           };
         },
-        error: () => alert(`Erro ao carregar despesa: ${id}`)
+        error: () => {
+          this.toast.error('Erro ao carregar despesa');
+          this.router.navigate(['/despesas']);
+        }
       });
     }
   }
 
-
   submit(form: NgForm) {
-    this.errorMessage = null;
-    this.successMessage = null;
-
     if (this.isSubmitting) return;
 
     this.isSubmitting = true;
+    this.errorMessage = null;
 
     if (!form.valid) {
-      this.errorMessage = 'Ocorreu um erro na validação do formulário';
+      this.formError.markAllAsTouched(form);
+      this.isSubmitting = false;
       return;
     }
 
+    const action = this.isEdit
+      ? this.service.update(this.despesa.id!, this.despesa)
+      : this.service.create(this.despesa);
 
-    const action = this.isEdit ? this.service.update(this.despesa.id!, this.despesa) : this.service.create(this.despesa);
     action.subscribe({
-      next: () => { this.isSubmitting = false; this.router.navigate(['/despesas']) },
-      error: err => { this.isSubmitting = false; alert(err.error?.message || 'Erro ao salvar despesa') }
+      next: () => {
+        this.toast.success(
+          this.isEdit
+            ? 'Despesa atualizada com sucesso!'
+            : 'Despesa criada com sucesso!'
+        );
+        this.router.navigate(['/despesas']);
+      },
+      error: err => {
+        this.isSubmitting = false;
+        this.toast.error('Erro ao salvar despesa');
+        this.formError.applyBackendErrors(form, err.error);
+      }
     });
   }
+
 }

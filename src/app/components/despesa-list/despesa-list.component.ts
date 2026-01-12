@@ -8,7 +8,7 @@ import { Router, RouterLink, RouterModule } from "@angular/router";
 @Component({
   selector: 'app-despesa-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgFor, RouterLink, RouterModule],
+  imports: [CommonModule, FormsModule, NgFor, RouterModule],
   templateUrl: './despesa-list.component.html',
   styleUrl: './despesa-list.component.scss'
 })
