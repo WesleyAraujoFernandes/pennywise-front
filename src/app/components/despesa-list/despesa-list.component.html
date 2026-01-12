@@ -1,14 +1,13 @@
-<p>despesa-list works!</p>
 <div class="container mt-4">
   <h2>Despesas</h2>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Descrição</th>
+        <th style="width: 400px;">Descrição</th>
         <th>Valor</th>
         <th>Data</th>
         <th>Categoria</th>
-        <th>Ações</th>
+        <th style="width: 150px;">Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +18,7 @@
         <td>{{ d.categoria }}</td>
         <td>
           <button class="btn btn-sm btn-primary" (click)="edit(d)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="delete(d.id)">Excluir</button>
+          <button style="margin-left: 5px;" class="btn btn-sm btn-danger" (click)="delete(d.id)">Excluir</button>
         </td>
       </tr>
     </tbody>

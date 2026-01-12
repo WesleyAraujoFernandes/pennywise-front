@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Despesa, DespesaService } from '../../services/despesa.service';
@@ -6,7 +6,7 @@ import { Despesa, DespesaService } from '../../services/despesa.service';
 @Component({
   selector: 'app-despesa-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgFor],
   templateUrl: './despesa-list.component.html',
   styleUrl: './despesa-list.component.scss'
 })

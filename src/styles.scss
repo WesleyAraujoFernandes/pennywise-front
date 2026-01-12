@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+/* Hover */
+.navbar-nav .nav-link:hover {
+  background-color: #e2e6ea;
+  border-radius: 4px;
+}
+
+/* Link ativo */
+.navbar-nav .nav-link.active {
+  font-weight: bold;
+  color: #0d6efd;
+}
