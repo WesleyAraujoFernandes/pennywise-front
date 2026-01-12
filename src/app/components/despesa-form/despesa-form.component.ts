@@ -15,6 +15,7 @@ export class DespesaFormComponent implements OnInit {
 
   errorMessage: string | null = null;
   successMessage: string | null = null;
+  isSubmitting = false;
 
   despesa: Despesa = {} as Despesa;
   isEdit = false;
@@ -47,14 +48,20 @@ export class DespesaFormComponent implements OnInit {
     this.errorMessage = null;
     this.successMessage = null;
 
+    if (this.isSubmitting) return;
+
+    this.isSubmitting = true;
+
     if (!form.valid) {
       this.errorMessage = 'Ocorreu um erro na validação do formulário';
       return;
     }
+
+
     const action = this.isEdit ? this.service.update(this.despesa.id!, this.despesa) : this.service.create(this.despesa);
     action.subscribe({
-      next: () => this.router.navigate(['/despesas']),
-      error: err => alert(err.error?.message || 'Erro ao salvar despesa')
+      next: () => { this.isSubmitting = false; this.router.navigate(['/despesas']) },
+      error: err => { this.isSubmitting = false; alert(err.error?.message || 'Erro ao salvar despesa') }
     });
   }
 }

@@ -2,6 +2,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Despesa, DespesaService } from '../../services/despesa.service';
+import { CATEGORIA_LABEL } from '../../shared/categoria-label';
 import { Router, RouterLink, RouterModule } from "@angular/router";
 
 @Component({
@@ -18,6 +19,10 @@ export class DespesaListComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+  }
+
+  categoriaLabel(value: string): string {
+    return CATEGORIA_LABEL[value] ?? value;
   }
 
   load() {
