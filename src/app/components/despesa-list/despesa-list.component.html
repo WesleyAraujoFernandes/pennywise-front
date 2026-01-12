@@ -17,8 +17,9 @@
         <td>{{ d.data }}</td>
         <td>{{ d.categoria }}</td>
         <td>
-          <button class="btn btn-sm btn-primary" (click)="edit(d)">Editar</button>
-          <button style="margin-left: 5px;" class="btn btn-sm btn-danger" (click)="delete(d.id)">Excluir</button>
+          <!--<a class="btn btn-sm btn-warning me-2" [routerLink]="['/despesas', d.id, 'editar']">Editar</a>-->
+          <a class="btn btn-sm btn-warning me-2" (click)="edit(d)">Editar</a>
+          <button class="btn btn-sm btn-danger" (click)="delete(d.id!)">Excluir</button>
         </td>
       </tr>
     </tbody>

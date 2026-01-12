@@ -22,7 +22,7 @@ export class DespesaService {
   }
 
   getById(id: number): Observable<Despesa> {
-    return this.http.get<Despesa>(this.apiUrl);
+    return this.http.get<Despesa>(`${this.apiUrl}/${id}`);
   }
 
   create(despesa: Despesa): Observable<Despesa> {

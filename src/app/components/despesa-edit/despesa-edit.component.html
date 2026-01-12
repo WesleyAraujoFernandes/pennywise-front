@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <h2>{{ isEdit ? 'Editar Despesa' : 'Nova Despesa' }}</h2>
+  <h2>Editar Despesa</h2>
   <!-- Mensagens de erro e sucesso -->
   <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
   <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
@@ -7,20 +7,19 @@
   <form #f="ngForm" (ngSubmit)="submit(f)">
     <div class="mb-3">
       <label class="form-label">Descrição</label>
-      <input type="text" class="form-control" name="descricao" [(ngModel)]="despesa.descricao" required maxlength="255">
+      <input type="text" class="form-control" name="descricao" ngModel required maxlength="255">
     </div>
     <div class="mb-3">
       <label class="form-label">Valor</label>
-      <input type="number" class="form-control" name="valor" [(ngModel)]="despesa.valor" required min="0.01"
-        step="0.01">
+      <input type="number" class="form-control" name="valor" ngModel required min="0.01" step="0.01">
     </div>
     <div class="mb-3">
       <label class="form-label">Data</label>
-      <input type="date" class="form-control" name="data" [(ngModel)]="despesa.data" required>
+      <input type="date" class="form-control" name="data" ngModel required>
     </div>
     <div class="mb-3">
       <label class="form-label">Categoria</label>
-      <select class="form-select" name="categoria" [(ngModel)]="despesa.categoria" required>
+      <select class="form-select" name="categoria" ngModel required>
         <option value="ALIMENTACAO">Alimentação</option>
         <option value="TRANSPORTE">Transporte</option>
         <option value="MORADIA">Moradia</option>
@@ -30,7 +29,7 @@
         <option value="OUTRAS">Outras</option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">{{ isEdit ? 'Atualizar' : 'Salvar' }}</button>
+    <button type="submit" class="btn btn-success">Atualizar</button>
     <a routerLink="/despesas" class="btn btn-secondary ms-2">Cancelar</a>
   </form>
 </div>
