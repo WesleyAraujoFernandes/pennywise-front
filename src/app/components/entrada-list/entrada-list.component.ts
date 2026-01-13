@@ -3,7 +3,6 @@ import { Entrada, EntradaService } from '../../services/entrada.service';
 import { Router, RouterLink, RouterModule } from "@angular/router";
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DespesaService } from '../../services/despesa.service';
 
 @Component({
   selector: 'app-entrada-list',
