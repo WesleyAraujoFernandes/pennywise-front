@@ -1,1 +1,39 @@
-<p>entrada-form works!</p>
+<div class="container mt-4">
+  <h2>{{ isEdit ? 'Editar Entrada' : 'Cadasto de Nova Entrada' }}</h2>
+  <!-- Mensagens de erro e sucesso -->
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <form #f="ngForm" (ngSubmit)="submit(f)">
+    <div class="mb-3">
+      <label class="form-label">Descrição</label>
+      <input type="text" class="form-control" name="descricao" [(ngModel)]="entrada.descricao" required maxlength="255">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Valor (R$)</label>
+      <input type="number" currencyMask[options]="currencyOptions" class="form-control" name="valor"
+        [(ngModel)]="entrada.valor" required min="0.01" step="0.01">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Data</label>
+      <input type="date" class="form-control" name="data" [(ngModel)]="entrada.data" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Categoria</label>
+      <select class="form-select" name="categoria" [(ngModel)]="entrada.categoria" required>
+        <option value="SALARIO">Salário</option>
+        <option value="EMPRESTIMO">Empréstimo</option>
+        <option value="RETORNO_EMPRESTIMO">Retorno de empréstimo</option>
+        <option value="DOACAO">Doação</option>
+        <option value="OUTRAS">Outras</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+
+      <span *ngIf="!isSubmitting">Salvar</span>
+      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm"></span>
+    </button>
+
+    <a routerLink="/entrada" class="btn btn-secondary ms-2">Cancelar</a>
+  </form>
+</div>

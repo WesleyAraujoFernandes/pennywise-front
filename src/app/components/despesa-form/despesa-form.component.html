@@ -10,9 +10,10 @@
       <input type="text" class="form-control" name="descricao" [(ngModel)]="despesa.descricao" required maxlength="255">
     </div>
     <div class="mb-3">
-      <label class="form-label">Valor</label>
-      <input type="number" class="form-control" name="valor" [(ngModel)]="despesa.valor" required min="0.01"
-        step="0.01">
+      <label class="form-label">Valor (R$)</label>
+      <input type="number"
+        currencyMask[options]="{prefix: 'R$ ', thousands: ',', decimal: '.', precision: 2, allowNegative: false}"
+        class="form-control" name="valor" [(ngModel)]="despesa.valor" required min="0.01" step="0.01">
     </div>
     <div class="mb-3">
       <label class="form-label">Data</label>

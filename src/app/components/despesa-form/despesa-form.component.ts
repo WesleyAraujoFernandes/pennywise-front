@@ -5,11 +5,12 @@ import { Despesa, DespesaService } from '../../services/despesa.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormErrorService } from '../../services/form-error.service';
 import { ToastService } from '../../services/toast.service';
+import { NgxCurrencyDirective } from 'ngx-currency';
 
 @Component({
   selector: 'app-despesa-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, NgxCurrencyDirective],
   templateUrl: './despesa-form.component.html',
   styleUrl: './despesa-form.component.scss'
 })
