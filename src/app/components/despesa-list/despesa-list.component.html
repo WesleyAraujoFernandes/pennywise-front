@@ -1,6 +1,24 @@
 <div class="container mt-4">
   <h2>Lista de Despesas</h2>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <label>Data inicial</label>
+      <input type="date" class="form-control" [(ngModel)]="dataInicio">
+    </div>
+
+    <div class="col-md-4">
+      <label>Data final</label>
+      <input type="date" class="form-control" [(ngModel)]="dataFim">
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+      <button class="btn btn-primary" (click)="buscar()">Buscar</button>
+      <button class="btn btn-outline-secondary ms-2" (click)="limpar()">Limpar</button>
+    </div>
+  </div>
   <button [routerLink]="['/despesas/novo']" class="btn btn-sm btn-success">Nova Despesa</button>
+
   <table class="table table-striped">
     <thead>
       <tr>

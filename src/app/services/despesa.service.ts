@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -35,6 +35,15 @@ export class DespesaService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  buscarPorPeriodo(dataInicio?: string, dataFim?: string): Observable<Despesa[]> {
+    let params = new HttpParams();
+    if (dataInicio) params = params.set('dataInicio', dataInicio);
+    if (dataFim) params = params.set('dataFim', dataFim);
+    console.log(params.get('dataInicio'));
+    console.log(params.get('dataFim'));
+    return this.http.get<Despesa[]>(this.apiUrl + "/periodo", { params });
   }
 
 }
