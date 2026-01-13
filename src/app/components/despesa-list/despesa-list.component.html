@@ -15,7 +15,7 @@
       <tr *ngFor="let d of despesas">
         <td>{{ d.descricao }}</td>
         <td>{{ d.valor | currency:'BRL' }}</td>
-        <td>{{ d.data }}</td>
+        <td>{{ d.data | date: 'dd/MM/yyyy' }}</td>
         <td>{{ categoriaLabel(d.categoria) }}</td>
         <td>
           <!--<a class="btn btn-sm btn-warning me-2" [routerLink]="['/despesas', d.id, 'editar']">Editar</a>-->
