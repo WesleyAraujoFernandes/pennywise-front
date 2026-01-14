@@ -13,10 +13,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  credentials: LoginRequest = {
-    email: '', senha: ''
-  };
-
+  email = '';
+  senha = '';
   isSubmitting = false;
   errorMessage: string | null = null;
 
@@ -35,13 +33,13 @@ export class LoginComponent {
 
     this.isSubmitting = true;
 
-    this.authService.login(this.credentials).subscribe({
+    this.authService.login(this.email, this.senha).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/dashboard']);
       },
-      error: () => {
+      error: err => {
         this.isSubmitting = false;
-        this.errorMessage = 'Usuário ou senha inválidos';
+        this.errorMessage = err.message;
       }
     })
   }

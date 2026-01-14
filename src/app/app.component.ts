@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ToastContainerComponent } from './components/shared/toast-container/toast-container.component';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -13,4 +14,12 @@ import { ToastContainerComponent } from './components/shared/toast-container/toa
 })
 export class AppComponent {
   title = 'pennywise-front';
+
+  constructor(public auth: AuthService) {
+
+  }
+
+  logout() {
+    this.auth.logout();
+  }
 }
