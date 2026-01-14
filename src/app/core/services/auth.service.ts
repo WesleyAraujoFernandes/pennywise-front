@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoginRequest } from '../models/login-request.model';
-import { delay, Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Injectable({
