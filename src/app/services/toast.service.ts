@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 export interface Toast {
   message: string,
-  type: 'success' | 'error' | 'info'
+  type: 'success' | 'error' | 'info' | 'warning'
 }
 
 @Injectable({
@@ -26,5 +26,9 @@ export class ToastService {
 
   error(message: string) {
     this.show(message, 'error');
+  }
+
+  warning(message: string) {
+    this.show(message, 'warning');
   }
 }
