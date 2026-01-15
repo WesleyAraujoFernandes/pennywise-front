@@ -1,9 +1,10 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { catchError, Observable, throwError } from "rxjs";
+import { catchError, Observable, switchMap, tap, throwError } from "rxjs";
 import { AuthService } from "../services/auth.service";
 import { ToastService } from "../../services/toast.service";
+import { LoginResponse } from "../models/login-response-model";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -11,6 +12,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private http: HttpClient,
     private toast: ToastService // seu serviço de toast
   ) { }
 
@@ -29,10 +31,27 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          this.toast.error('Sessão expirada. Faça login novamente.');
-          this.authService.logout();
-          //this.router.navigate(['/unauthorized']);
+        if (error.status === 401 && this.authService.getRefreshToken()) {
+          return this.http.post<LoginResponse>(
+            'http://localhost:8080/auth/refresh',
+            { refreshToken: this.authService.getRefreshToken() }
+          ).pipe(
+            tap(res => {
+              localStorage.setItem('pennywise_access_token', res.accessToken);
+            }),
+            switchMap(() => {
+              const newRequest = request.clone({
+                setHeaders: {
+                  Authorization: `Bearer ${this.authService.getToken()}`
+                }
+              });
+              return next.handle(newRequest);
+            }),
+            catchError(() => {
+              this.authService.logout();
+              return throwError(() => error);
+            })
+          );
         }
 
         if (error.status === 403) {

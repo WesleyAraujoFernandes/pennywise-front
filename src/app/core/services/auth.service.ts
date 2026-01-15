@@ -9,7 +9,8 @@ import { LoginResponse } from '../models/login-response-model';
 export class AuthService {
 
   private readonly API_URL = 'http://localhost:8080/auth';
-  private readonly TOKEN_KEY = 'pennywise_token';
+  private readonly ACCESS_TOKEN = 'pennywise_access_token';
+  private readonly REFRESH_TOKEN = 'pennywise_refresh_token';
   private readonly USER_KEY = 'pennywise_user';
 
   private userSubject = new BehaviorSubject<AuthUser | null>(this.loadUser());
@@ -23,7 +24,8 @@ export class AuthService {
       password
     }).pipe(
       tap(response => {
-        localStorage.setItem(this.TOKEN_KEY, response.token);
+        localStorage.setItem(this.ACCESS_TOKEN, response.token);
+        localStorage.setItem(this.REFRESH_TOKEN, response.refreshToken);
         localStorage.setItem(this.USER_KEY, JSON.stringify({
           email: response.email,
           role: response.role
@@ -38,9 +40,26 @@ export class AuthService {
     );
   }
 
-
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+
+    const refreshToken = this.getRefreshToken();
+
+    if (refreshToken) {
+      this.http.post(
+        'http://localhost:8080/auth/logout',
+        { refreshToken }
+      ).subscribe({
+        complete: () => this.clearSession(),
+        error: () => this.clearSession()
+      });
+    } else {
+      this.clearSession();
+    }
+  }
+
+  private clearSession(): void {
+    localStorage.removeItem(this.ACCESS_TOKEN);
+    localStorage.removeItem(this.REFRESH_TOKEN);
     localStorage.removeItem(this.USER_KEY);
     this.userSubject.next(null);
     this.router.navigate(['/login']);
@@ -55,7 +74,11 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return localStorage.getItem(this.ACCESS_TOKEN);
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.REFRESH_TOKEN);
   }
 
   getUser(): AuthUser | null {
