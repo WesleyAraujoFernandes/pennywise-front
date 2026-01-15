@@ -50,6 +50,10 @@ export class AuthService {
     return !!this.getToken();
   }
 
+  isAdmin(): boolean {
+    return this.hasRole('ROLE_ADMIN');
+  }
+
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -58,9 +62,9 @@ export class AuthService {
     return this.userSubject.value;
   }
 
-
   hasRole(role: string): boolean {
-    return this.userSubject.value?.role === role;
+    const user = this.userSubject.value;
+    return !!user && user.role === role;
   }
 
   private loadUser(): AuthUser | null {

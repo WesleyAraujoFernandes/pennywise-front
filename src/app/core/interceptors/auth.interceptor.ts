@@ -29,15 +29,15 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authRequest).pipe(
       catchError((error: HttpErrorResponse) => {
-
         if (error.status === 401) {
           this.toast.error('Sessão expirada. Faça login novamente.');
           this.authService.logout();
+          //this.router.navigate(['/unauthorized']);
         }
 
         if (error.status === 403) {
-          this.toast.warning('Você não tem permissão para acessar este recurso.');
-          this.router.navigate(['/dashboard']);
+          this.toast.warning('Você não tem permissão para esta ação.');
+          this.router.navigate(['/unauthorized']);
         }
 
         return throwError(() => error);

@@ -72,9 +72,14 @@ export class DespesaFormComponent implements OnInit {
         this.router.navigate(['/despesas']);
       },
       error: err => {
-        this.isSubmitting = false;
-        this.toast.error('Erro ao salvar despesa');
-        this.formError.applyBackendErrors(form, err.error);
+
+        // erros de validação
+        if (err.status === 400 && err.error?.errors) {
+          this.formError.applyBackendErrors(form, err.error.errors);
+          return;
+        }
+
+        // qualquer outra coisa deixa o interceptor cuidar
       }
     });
   }
