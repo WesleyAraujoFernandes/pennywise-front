@@ -6,6 +6,7 @@ import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-entrada-list',
@@ -18,7 +19,7 @@ export class EntradaListComponent implements OnInit {
   entradas: Entrada[] = [];
   dataInicio?: string;
   dataFim?: string;
-  constructor(private router: Router, private service: EntradaService, private toast: ToastService) { }
+  constructor(private router: Router, private service: EntradaService, private toast: ToastService, public auth: AuthService) { }
 
   ngOnInit(): void {
     this.load();

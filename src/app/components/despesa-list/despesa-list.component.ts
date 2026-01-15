@@ -5,6 +5,7 @@ import { Despesa, DespesaService } from '../../services/despesa.service';
 import { CATEGORIA_LABEL } from '../../shared/categoria-label';
 import { Router, RouterLink, RouterModule } from "@angular/router";
 import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-despesa-list',
@@ -18,7 +19,7 @@ export class DespesaListComponent implements OnInit {
   dataInicio?: string;
   dataFim?: string;
 
-  constructor(private service: DespesaService, private router: Router, private toast: ToastService) { }
+  constructor(private service: DespesaService, private router: Router, private toast: ToastService, public auth: AuthService) { }
 
   ngOnInit(): void {
     this.load();

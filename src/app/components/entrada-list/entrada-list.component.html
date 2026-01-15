@@ -19,7 +19,7 @@
   </div>
 
 
-  <button [routerLink]="['/entradas/novo']" class="btn btn-sm btn-success">Nova Entrada</button>
+  <button [routerLink]="['/entradas/novo']" *ngIf="auth.isAdmin()" class="btn btn-sm btn-success">Nova Entrada</button>
 
   <table class="table table-striped">
     <thead>
@@ -28,7 +28,7 @@
         <th>Valor</th>
         <th>Data de Entrada</th>
         <th>Categoria</th>
-        <th style="width: 150px; text-align: center;">Ações</th>
+        <th *ngIf="auth.isAdmin()" style="width: 150px; text-align: center;">Ações</th>
       </tr>
     </thead>
     <tbody>
@@ -37,7 +37,7 @@
         <td>{{ e.valor | currency:'BRL' }}</td>
         <td>{{ e.data | date: 'dd/MM/yyyy' }}</td>
         <td>{{ categoriaLabel(e.categoria) }}</td>
-        <td>
+        <td *ngIf="auth.isAdmin()">
           <!--<a class="btn btn-sm btn-warning me-2" [routerLink]="['/despesas', d.id, 'editar']">Editar</a>-->
           <a class="btn btn-sm btn-warning me-2" (click)="edit(e)">Editar</a>
           <button class="btn btn-sm btn-danger" (click)="delete(e.id!)">Excluir</button>
