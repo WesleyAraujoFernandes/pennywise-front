@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, Observable, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { AuthUser } from '../models/auth-user.model';
 import { HttpClient } from '@angular/common/http';
 import { LoginResponse } from '../models/login-response-model';
@@ -11,6 +11,8 @@ export class AuthService {
   private readonly TOKEN_KEY = 'pennywise_token';
   private readonly REFRESH_TOKEN_KEY = 'pennywise_refresh_token';
   private readonly USER_KEY = 'pennywise_user';
+  private userSubject = new BehaviorSubject<AuthUser | null>(this.loadUser());
+  user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -19,29 +21,38 @@ export class AuthService {
       email,
       password
     }).pipe(
-      tap(response => this.storeAuthData(response)),
+      tap(response => this.setSession(response)),
       tap(() => this.router.navigate(['/dashboard']))
     );
   }
 
   logout(): void {
-    const refreshToken = this.getRefreshToken();
-
-    if (refreshToken) {
-      this.http.post(`${this.API_URL}/logout`, { refreshToken }).subscribe();
-    }
-
-    localStorage.clear();
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
+    this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   refreshToken(): Observable<LoginResponse> {
     const refreshToken = this.getRefreshToken();
 
-    return this.http.post<LoginResponse>(`${this.API_URL}/refresh`, {
-      refreshToken
-    }).pipe(
-      tap(response => this.storeAuthData(response))
+    return this.http.post<LoginResponse>(
+      `${this.API_URL}/refresh`,
+      { refreshToken }
+    ).pipe(
+      tap(res => {
+        localStorage.setItem(this.TOKEN_KEY, res.accessToken);
+        localStorage.setItem(this.USER_KEY, JSON.stringify({
+          email: res.email,
+          role: res.role,
+          refreshToken: res.refreshToken
+        }));
+
+        this.userSubject.next({
+          email: res.email,
+          role: res.role
+        });
+      })
     );
   }
 
@@ -54,12 +65,51 @@ export class AuthService {
     }));
   }
 
+  private loadUser(): AuthUser | null {
+    const stored = localStorage.getItem(this.USER_KEY);
+
+    if (!stored) {
+      return null;
+    }
+
+    try {
+      const parsed = JSON.parse(stored);
+
+      if (!parsed.email || !parsed.role) {
+        return null;
+      }
+
+      return {
+        email: parsed.email,
+        role: parsed.role
+      };
+    } catch {
+      return null;
+    }
+  }
+
+
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
   getRefreshToken(): string | null {
-    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+    const user = localStorage.getItem(this.USER_KEY);
+    return user ? JSON.parse(user).refreshToken : null;
+  }
+
+  setSession(response: LoginResponse): void {
+    localStorage.setItem(this.TOKEN_KEY, response.accessToken);
+    localStorage.setItem(this.USER_KEY, JSON.stringify({
+      email: response.email,
+      role: response.role,
+      refreshToken: response.refreshToken
+    }));
+
+    this.userSubject.next({
+      email: response.email,
+      role: response.role
+    })
   }
 
   isAuthenticated(): boolean {

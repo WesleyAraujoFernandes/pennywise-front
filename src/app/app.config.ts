@@ -8,15 +8,17 @@ import {
 
 import { routes } from './app.routes';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { AuthRefreshInterceptor } from './core/interceptors/auth-refresh.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-
     provideHttpClient(
       withInterceptorsFromDi()
     ),
+    AuthInterceptor,
+    AuthRefreshInterceptor,
 
     {
       provide: HTTP_INTERCEPTORS,
