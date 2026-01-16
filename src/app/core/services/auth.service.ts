@@ -27,8 +27,12 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
+    this.http.post(this.API_URL + '/logout', {}).subscribe({
+      complete: () => this.clearSession()
+    });
+  }
+
+  private clearSession() {
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
