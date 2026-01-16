@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Entrada, EntradaService } from '../../services/entrada.service';
 import { CATEGORIA_LABEL } from '../../shared/categoria-label';
-import { Router, RouterLink, RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../core/services/auth.service';
 

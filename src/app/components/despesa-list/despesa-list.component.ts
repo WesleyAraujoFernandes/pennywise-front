@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Despesa, DespesaService } from '../../services/despesa.service';
 import { CATEGORIA_LABEL } from '../../shared/categoria-label';
-import { Router, RouterLink, RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import { ToastService } from '../../services/toast.service';
 import { AuthService } from '../../core/services/auth.service';
 
