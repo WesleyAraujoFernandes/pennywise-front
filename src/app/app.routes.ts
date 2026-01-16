@@ -8,9 +8,11 @@ import { authGuard } from './core/guards/auth.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
 import { DespesaFormComponent } from './components/despesa-form/despesa-form.component';
 import { EntradaFormComponent } from './components/entrada-form/entrada-form.component';
+import { SessionExpiredComponent } from './components/session-expired/session-expired.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  { path: 'session-expired', component: SessionExpiredComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
 
   {

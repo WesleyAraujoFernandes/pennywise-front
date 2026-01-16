@@ -70,8 +70,11 @@ export class AuthService {
     }
   }
 
-  private clearSession(): void {
+  public clearSession(): void {
     localStorage.clear();
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
