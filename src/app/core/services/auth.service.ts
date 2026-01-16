@@ -55,7 +55,7 @@ export class AuthService {
       role: response.role
     });
   }
-
+  /*
   logout(): void {
     const refreshToken = this.getRefreshToken();
 
@@ -68,6 +68,22 @@ export class AuthService {
     } else {
       this.clearSession();
     }
+  }
+*/
+  /*
+    logout(): void {
+      this.http.post<void>(`${this.API_URL}/logout`, {}).subscribe({
+        next: () => this.clearSession(),
+        error: () => this.clearSession()
+      });
+    }
+  */
+  logout(): void {
+    this.http.post(`${this.API_URL}/logout`, {}, { withCredentials: true })
+      .subscribe({
+        complete: () => this.clearSession(),
+        error: () => this.clearSession()
+      });
   }
 
   public clearSession(): void {
